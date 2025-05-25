@@ -1,6 +1,6 @@
 import random
 
-class TrisectionProtocol:
+class BRSProtocol:
     def __init__(self, secret_angle):
         self.secret_angle = secret_angle
         self.trisection = round(secret_angle/3,2)
@@ -36,18 +36,20 @@ def authenticate_prover(prover,rounds=10):
 
         expected=prover.secret_angle if challenge=="show_angle" else prover.trisection
         response=prover.respond_to_challenge(challenge)
+
+
         if response!=expected:
             print("Auth failed:incorrect response.")
             return False
         else:
-            print(f"Correct response: {response}°\n")
+            print(f"Correct response:{response}°\n")
 
     print("Prover authenticated successfully after all rounds.\n")
     return True
 
 def simulate_authentication():
     secret_angle=random.randint(30,150)
-    prover = TrisectionProtocol(secret_angle)
+    prover=BRSProtocol(secret_angle)
     authenticated=authenticate_prover(prover,rounds=10)
     print("Auth Result:","SUCCESS" if authenticated else "FAILURE")
 

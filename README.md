@@ -8,7 +8,7 @@ Simulate the Burmester-Rivest-Shamir (BRS) identification and authentication pro
 
 ## Background
 
-In classical geometry, **trisecting an arbitrary angle** using only a compass and straightedge is known to be **impossible in general**. This geometric limitation forms the basis for the BRS identification protocol: the Prover knows a trisectable angle and proves it without disclosing the method.
+In classical geometry, **trisecting an arbitrary angle** using only a compass and straightedge is known to be **impossible in general**. This limitation forms the base for the BRS identification protocol: the Prover knows a trisectable angle and proves it without disclosing the method.
 
 ---
 
@@ -17,63 +17,66 @@ In classical geometry, **trisecting an arbitrary angle** using only a compass an
 - The **Prover** knows a secret angle θ.
 - The **Verifier** can challenge them to:
   - Reveal θ (the full angle), or
-  - Reveal θ/3 (a correct trisection).
-- The Prover only responds to **one challenge per round**, never both.
-- Repeating this interaction reduces the chance of cheating.
+  - Reveal θ/3 (the trisection).
+- The Prover only answers **one of the questions** each round, not both.
+- After many rounds, the verifier can be sure (or like almost sure) the Prover knows the secret.
 
-This setup simulates a **zero-knowledge identification scheme**.
+It shows a basic **zero-knowledge proof** logic where nothing secret is revealed but still convinces the other person.
 
 ---
 
 ## Protocol Steps
 
-1. Prover selects a secret angle (e.g., 120°).
-2. Prover computes its trisection (e.g., 40°).
-3. Verifier challenges with either:
+1. Prover picks a secret angle (like 120°).
+2. Prover calculates the trisection (like 40°).
+3. Verifier asks one of:
    - "Show me the angle"  
-   - or "Show me the trisection"
-4. Prover responds correctly.
-5. Repeat the process over multiple rounds.
+   - OR "Show me the trisection"
+4. Prover answers only the one asked.
+5. Repeat multiple rounds so cheating is unlikely.
 
 ---
 
 ## Code Overview
 
-The project includes **four Python programs**:
+I wrote a few Python programs for this.
 
-### 1. `brs_protocol.py`  
-Simulates a basic 5-round identification protocol using automated random challenges and prover responses.
+### 1. `brs_protocol_with_auth.py`  
+Does the whole thing: identification plus 10 rounds of authentication. Random challenges each time, fails if one response is wrong.
 
-### 2. `brs_protocol_with_auth.py`  
-Includes a full **authentication system**: runs 10 rounds of randomized challenge-response, and authenticates if all responses are correct.
+### 2. `interactive_brs_protocol.py`  
+You become the **Verifier**. You type either `angle` or `trisection`, and the Prover (the code) answers you. It's like playing with it.
 
-### 3. `interactive_brs_protocol.py`  
-**Interactive Verifier Mode**: You play the verifier. In each round, you type `angle` or `trisection`, and the prover responds automatically.
+### 3. `prover_play_interactive.py`  
+You are the **Prover** now. The program asks you questions and you have to type the correct response. If you're wrong, it says you failed.
 
-### 4. `prover_play_interactive.py`  
-**Interactive Prover Mode**: The system plays the verifier. You act as the prover and must type the correct responses manually (based on your secret).
+### 4. `brs_protocol_cheating_prover.py`  
+This one is special. I added a version where the Prover is *not honest*. They guess sometimes (10% chance of giving a wrong answer).  
+It shows how someone who doesn't actually know the secret will eventually be caught if you repeat the protocol enough times.
 
 ---
 
+## Notes
 
-## Notes for Presentation
-
-- BRS protocol is a **conceptual example** of a **zero-knowledge proof**.
-- Emphasize the role of **geometric impossibility** in making this proof meaningful.
-- Highlight how **interactive protocols** simulate real-world identity verification without secret leakage.
-- In real-world systems, such ideas are implemented using **cryptographic primitives** (e.g., ZK-SNARKs, Fiat-Shamir).
+- This BRS thing is like a simple idea to show **zero-knowledge proof**.
+- It’s based on geometry stuff, not really used in real-life crypto but it’s still cool.
+- You can explain that you never give both values (angle + trisection) in one round, so the Verifier never learns the full secret.
+- If someone cheats, over time their answers won’t match and they fail.
 
 ---
 
 ## Files
 
-- `brs_protocol_with_auth.py` – Full authentication with automated challenge-response  
-- `interactive_brs_protocol.py` – Interactive verifier mode  
-- `prover_play_interactive.py` – Interactive prover mode  
-- `README.md` – The documentation
+- `brs_protocol_with_auth.py` – Full protocol with authentication
+- `interactive_brs_protocol.py` – You act as the Verifier
+- `prover_play_interactive.py` – You act as the Prover
+- `brs_protocol_cheating_prover.py` – Fake Prover that sometimes lies
+- `README.md` – This document 
 
 ---
 
 ## Conclusion
 
-This project demonstrates how a **zero-knowledge identification protocol** can be constructed from a purely geometric impossibility. It emphasizes the balance between proving knowledge and preserving secrecy — a concept widely used in modern cryptography.
+This whole project is about how someone can prove they know something **without revealing it**.  
+We used angle trisection to simulate that.  
+It was actually fun to make, and helped me understand how zero-knowledge proofs kinda work.  
