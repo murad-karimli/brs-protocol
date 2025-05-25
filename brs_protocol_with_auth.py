@@ -24,13 +24,13 @@ class BRSProtocol:
 
 def authenticate_prover(prover,rounds=10):
     print("Burmester-Rivest-Shamir Authentication Protocol\n")
-    print(f"Prover has secret angle and will be tested {rounds} rounds.\n")
+    print(f"prover has secret angle and will tested {rounds} rounds\n")
 
 
     for i in range(1,rounds+1):
         print(f"--- Round {i} ---")
         challenge=random.choice(["show_angle","show_trisection"])
-        print(f"Verifier's challenge:{challenge.replace('_', ' ').capitalize()}")
+        print(f"verifier's chelenge:{challenge.replace('_', ' ').capitalize()}")
 
 
 
@@ -39,18 +39,18 @@ def authenticate_prover(prover,rounds=10):
 
 
         if response!=expected:
-            print("Auth failed:incorrect response.")
+            print("auth failed:incorrect")
             return False
         else:
-            print(f"Correct response:{response}°\n")
+            print(f"correct response:{response}°\n")
 
-    print("Prover authenticated successfully after all rounds.\n")
+    print("prover authenticated successful\n")
     return True
 
 def simulate_authentication():
     secret_angle=random.randint(30,150)
     prover=BRSProtocol(secret_angle)
     authenticated=authenticate_prover(prover,rounds=10)
-    print("Auth Result:","SUCCESS" if authenticated else "FAILURE")
+    print("Auth result:","SUCCESS" if authenticated else "FAILURE")
 
 simulate_authentication()
